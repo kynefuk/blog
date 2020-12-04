@@ -1,0 +1,26 @@
+{
+  "name": "app",
+  "dockerComposeFile": [
+    "../docker-compose.yaml"
+  ],
+  "service": "app",
+  // コンテナ接続時に開くパスz
+  "workspaceFolder": "/opt/server",
+  "extensions": [
+    "ms-python.python"
+  ],
+  "shutdownAction": "none",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  // コンテナを起動したままにするコマンドでDockerfileのCMDを上書きする
+  "overrideCommand": true,
+  // Dev Container作成時に1回のみ実行されるコマンド
+  // "postCreateCommand": ""
+  // Dev Container起動時に実行するコマンド
+  // "postStartCommand": ""
+  // Dev Containerアタッチ時に実行するコマンド
+  // "postAttachCommand": ""
+  // localhostからコンテナにつなぐポートを指定する
+  // "forwardPorts": []
+}
