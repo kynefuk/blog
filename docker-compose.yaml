@@ -6,7 +6,27 @@ services:
       target: dev
     ports:
       - '7000:7000'
+    environment:
+    - AWS_ACCESS_KEY_ID=xxx
+    - AWS_SECRET_ACCESS_KEY=xxx
+    - AWS_DEFAULT_REGION=ap-northeast-1
     restart: always
     tty: true
     volumes:
       - ./server:/opt/server/:delegated
+  dynamodb:
+    image: amazon/dynamodb-local
+    command: -jar DynamoDBLocal.jar -sharedDb -port 8081 -dbPath /ddb-data
+    environment:
+    - AWS_DEFAULT_REGION=ap-northeast-1
+    volumes:
+      - $PWD/ddb-data:/ddb-data
+    ports:
+      - 8081:8081
+  dynamod-admin:
+    image: instructure/dynamo-local-admin
+    environment:
+    - DYNAMO_ENDPOINT=http://dynamodb:8081
+    - AWS_DEFAULT_REGION=ap-northeast-1
+    ports:
+      - 8000:8000
