@@ -12,7 +12,7 @@ class Blog(BaseModel):
 
 
 class BlogList(BaseModel):
-    blogs: List[Blog]
+    blogs: Optional[List[Blog]]
 
 
 class BlogCreate(BaseModel):

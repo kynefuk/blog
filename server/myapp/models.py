@@ -21,10 +21,8 @@ class BlogTable(Model):
         host = "http://dynamodb:8081"
 
     title = UnicodeAttribute(hash_key=True, null=False)
-    content = UnicodeAttribute(null=False)
-    created_at = UTCDateTimeAttribute(
-        range_key=True, null=False, default=datetime.now()
-    )
+    content = UnicodeAttribute(null=False, default="")
+    created_at = UTCDateTimeAttribute(null=False, default=datetime.now())
     updated_at = UTCDateTimeAttribute(null=False, default=datetime.now())
     is_published = NumberAttribute(default=0, null=False)
     by_is_published = BlogIndex()
