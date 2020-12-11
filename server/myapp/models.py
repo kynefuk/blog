@@ -16,9 +16,9 @@ class BlogIndex(GlobalSecondaryIndex):
 
 class BlogTable(Model):
     class Meta:
-        table_name = "Blogs"
-        region = "ap-northeast-1"
-        host = "http://dynamodb:8081"
+        table_name: str
+        region: str
+        host: str
 
     title = UnicodeAttribute(hash_key=True, null=False)
     content = UnicodeAttribute(null=False, default="")
