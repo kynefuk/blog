@@ -1,7 +1,9 @@
 node_modules
 .next
-.env
+*.env
 venv
 .venv
 __pycache__
 ddb-data
+.serverless
+*-env.yml

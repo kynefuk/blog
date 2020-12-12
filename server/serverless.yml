@@ -1,0 +1,73 @@
+service: server
+app: blog
+
+frameworkVersion: '2'
+
+custom:
+  defaultStage: dev
+  envMapping:
+    dev:
+      envFile: ${file(./dev-env.yml)}
+    stg:
+      envFile: ${file(./stg-env.yml)}
+    prod:
+      envFile: ${file(./prod-env.yml)}
+  pythonRequirements:
+    dockerizePip: false
+    usePoetry: false
+
+  # customDomain:
+  #   domainName: ${self:custom.envFile.CUSTOM_DOMAIN}
+  #   basePath: ""
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
+  #   certificateName: ${self:custom.envFile.CUSTOM_DOMAIN}
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, self:custom.defaultStage}
+  region: ap-northeast-1
+  profile: serverless
+  timeout: 300
+  logRetentionInDays: 7
+  apiName: blog-backend-api
+
+package:
+  exclude:
+    - .venv
+    - pyproject.toml
+    - poetry.lock
+    - .devcontainer.json
+    - .flake8
+    - .gitignore
+    - Dockerfile
+    - handler.py
+    - Makefile
+    - node_modules/
+    - package.json
+    - package-lock.json
+    - serverless.yml
+
+plugins:
+  - serverless-python-requirements
+functions:
+  main:
+    handler: myapp.main.handler
+    environment:
+      CORS_ALLOWED_ORIGIN: ${self:custom.envMapping.${self:provider.stage}.envFile.CORS_ALLOWED_ORIGIN}
+      DOCS_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.DOCS_URL}
+      REDOCS_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.REDOCS_URL}
+      OPENAPI_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.OPENAPI_URL}
+      TABLE_NAME: ${self:custom.envMapping.${self:provider.stage}.envFile.TABLE_NAME}
+    events:
+      - http:
+          path: /{path+}
+          method: get
+          private: false
+          cors: true
+      # - http:
+      #     path: /{path+}
+      #     method: POST,PUT,PATCH
+      #     private: true
+      #     cors: true
