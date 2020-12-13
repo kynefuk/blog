@@ -53,6 +53,7 @@ plugins:
   - serverless-python-requirements
 functions:
   main:
+    role: BlogBackendRole
     handler: myapp.main.handler
     environment:
       CORS_ALLOWED_ORIGIN: ${self:custom.envMapping.${self:provider.stage}.envFile.CORS_ALLOWED_ORIGIN}
@@ -63,11 +64,21 @@ functions:
     events:
       - http:
           path: /{path+}
-          method: get
+          method: GET
           private: false
           cors: true
-      # - http:
-      #     path: /{path+}
-      #     method: POST,PUT,PATCH
-      #     private: true
-      #     cors: true
+      - http:
+          path: /{path+}
+          method: POST
+          private: true
+          cors: true
+          integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+resources:
+  - ${file(./dynamodb.yml)}
+  - ${file(./cognito-user-pool.yml)}
+  - ${file(./cognito-id-pool.yml)}

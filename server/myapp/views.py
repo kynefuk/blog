@@ -18,7 +18,7 @@ def get_object_or_404(blog_title: str):
     return updated_blog
 
 
-@router.get("/", response_model=BlogList)
+@router.get("/blogs", response_model=BlogList)
 def list_blog():
     blog_list = BlogIndex.query(1)
     blog_l = []
@@ -28,7 +28,7 @@ def list_blog():
     return blog_l
 
 
-@router.post("/", response_model=Blog)
+@router.post("/blogs", response_model=Blog)
 def create_blog(blog: BlogCreate):
     created = BlogTable(blog.title, content=blog.content, is_published=1)
     created.save()
@@ -37,7 +37,7 @@ def create_blog(blog: BlogCreate):
     return blog
 
 
-@router.patch("/{blog_title}", response_model=Blog, status_code=201)
+@router.patch("/blog/{blog_title}", response_model=Blog, status_code=201)
 def update_blog(blog_title: str, data: BlogUpdate):
     # titleを更新する場合は、既存のItemを削除して新しく作る
     target = get_object_or_404(blog_title)
@@ -58,7 +58,7 @@ def update_blog(blog_title: str, data: BlogUpdate):
     return blog
 
 
-@router.delete("/{blog_title}")
+@router.delete("/blog/{blog_title}")
 def delete_blog(blog_title: str):
     target = get_object_or_404(blog_title)
     target.delete()
