@@ -27,7 +27,7 @@ Resources:
                 - 'arn:aws:dynamodb'
                 - Ref: 'AWS::Region'
                 - Ref: 'AWS::AccountId'
-                - 'table/${self:custom.envMapping.${self:provider.stage}.envFile.TABLE_NAME}/index/*'
+                - 'table/${self:custom.envFile.TABLE_NAME}/index/*'
           - Effect: Allow
             Action:
               - dynamodb:CreateTable
@@ -48,7 +48,7 @@ Resources:
                 - 'arn:aws:dynamodb'
                 - Ref: 'AWS::Region'
                 - Ref: 'AWS::AccountId'
-                - 'table/${self:custom.envMapping.${self:provider.stage}.envFile.TABLE_NAME}'
+                - 'table/${self:custom.envFile.TABLE_NAME}'
           - Effect: Allow
             Action:
             - logs:CreateLogGroup

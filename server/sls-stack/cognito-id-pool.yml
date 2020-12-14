@@ -5,19 +5,46 @@ Resources:
       IdentityPoolName: blog-id-pool
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
-        - ClientId:
-            Ref: CognitoUserPoolClient
-          ProviderName:
+        - ProviderName:
             Fn::GetAtt: ["CognitoUserPool", "ProviderName"]
+          ClientId:
+            Ref: CognitoUserPoolClient
 
-  CognitoUserIdentityPoolRoleAttachment:
+  CognitoUserIdPoolRoleAttachment:
     Type: AWS::Cognito::IdentityPoolRoleAttachment
     Properties:
       IdentityPoolId:
         Ref: CognitoUserIdPool
       Roles:
+        # 認証済みユーザに付与するロール
         authenticated:
           Fn::GetAtt: [AuthenticatedRole, Arn]
+
+  AuthenticatedPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "cognito-identity:*"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
+              - "execute-api:Invoke"
+            Resource:
+              # "arn:aws:execute-api:us-east-1:account-id:api-id/*/GET/pets"
+              - Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: ApiGatewayRestApi
+                  - "/*/POST/"
+                  - "${self:provider.apiName}"
   
   AuthenticatedRole:
     Type: AWS::IAM::Role
@@ -38,27 +65,5 @@ Resources:
                   Ref: CognitoUserIdPool
               ForAnyValue:StringLike:
                 "Cognito-identity.amazonaws.com:amr": authenticated
-      Policies:
-        - PolicyName: "CognitoAuthorizedPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "cognito-identity:*"
-                Resource: "*"
-              - Effect: "Allow"
-                Action:
-                  - "execute-api:Invoke"
-                Resource:
-                  # "arn:aws:execute-api:us-east-1:account-id:api-id/*/GET/pets"
-                  - Fn::Join:
-                    - ""
-                    - - "arn:aws:execute-api:"
-                      - Ref: AWS::Region
-                      - ":"
-                      - Ref: AWS::AccountId
-                      - ":"
-                      - Ref: ApiGatewayRestApi
-                      - "/*/POST/"
-                      - "${self:provider.apiName}"
+      ManagedPolicyArns:
+      - Ref: AuthenticatedPolicy

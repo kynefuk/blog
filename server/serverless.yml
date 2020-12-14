@@ -5,13 +5,14 @@ frameworkVersion: '2'
 
 custom:
   defaultStage: dev
-  envMapping:
-    dev:
-      envFile: ${file(./dev-env.yml)}
-    stg:
-      envFile: ${file(./stg-env.yml)}
-    prod:
-      envFile: ${file(./prod-env.yml)}
+  envFile: ${file(./sls-stack/env/${self:provider.stage}.yml)}
+  # envMapping:
+  #   dev:
+  #     envFile: ${file(./sls-stack/env/dev.yml)}
+  #   stg:
+  #     envFile: ${file(./sls-stack/env/stg.yml)}
+  #   prod:
+  #     envFile: ${file(./sls-stack/env/prod.yml)}
   pythonRequirements:
     dockerizePip: false
     usePoetry: false
@@ -29,13 +30,14 @@ provider:
   stage: ${opt:stage, self:custom.defaultStage}
   region: ap-northeast-1
   profile: serverless
-  timeout: 300
+  timeout: 30 # API Gatewayのmax timeout(30)が上限となる
   logRetentionInDays: 7
   apiName: blog-backend-api
 
 package:
   exclude:
     - .venv
+    - .vscode
     - pyproject.toml
     - poetry.lock
     - .devcontainer.json
@@ -48,37 +50,15 @@ package:
     - package.json
     - package-lock.json
     - serverless.yml
+    - sls-stack
+    - ddb-data
+
+functions: ${file(./sls-stack/functions.yml)}
+
+resources:
+  - ${file(./sls-stack/dynamodb.yml)}
+  - ${file(./sls-stack/cognito-user-pool.yml)}
+  - ${file(./sls-stack/cognito-id-pool.yml)}
 
 plugins:
   - serverless-python-requirements
-functions:
-  main:
-    role: BlogBackendRole
-    handler: myapp.main.handler
-    environment:
-      CORS_ALLOWED_ORIGIN: ${self:custom.envMapping.${self:provider.stage}.envFile.CORS_ALLOWED_ORIGIN}
-      DOCS_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.DOCS_URL}
-      REDOCS_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.REDOCS_URL}
-      OPENAPI_URL: ${self:custom.envMapping.${self:provider.stage}.envFile.OPENAPI_URL}
-      TABLE_NAME: ${self:custom.envMapping.${self:provider.stage}.envFile.TABLE_NAME}
-    events:
-      - http:
-          path: /{path+}
-          method: GET
-          private: false
-          cors: true
-      - http:
-          path: /{path+}
-          method: POST
-          private: true
-          cors: true
-          integration: lambda
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-resources:
-  - ${file(./dynamodb.yml)}
-  - ${file(./cognito-user-pool.yml)}
-  - ${file(./cognito-id-pool.yml)}

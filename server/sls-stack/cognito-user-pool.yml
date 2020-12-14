@@ -3,17 +3,18 @@ Resources:
     Type: AWS::Cognito::UserPool
     Properties:
       UserPoolName: blog-user-pool
-      AccountRecoverySetting:
+      AccountRecoverySetting: # パスワード忘れた時のアカウント復旧
         RecoveryMechanisms:
-          - Name: verified_email
+          - Name: verified_email # どの属性を確認するか
             Priority: 1
       AdminCreateUserConfig:
-        AllowAdminCreateUserOnly: true
+        AllowAdminCreateUserOnly: true # 管理者のみがユーザプロファイル作成できる
         InviteMessageTemplate:
           EmailMessage: 'Your username is {username} and temporary password is {####}'
           EmailSubject: 'Your temporary password'
       AliasAttributes:
         - email
+        - preferred_username
       AutoVerifiedAttributes:
         - email
       EmailConfiguration:
@@ -28,11 +29,22 @@ Resources:
           RequireNumbers: true
           RequireSymbols: true
           RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
       Schema:
         - AttributeDataType: String
           DeveloperOnlyAttribute: false
           Mutable: true
           Name: email
+          Required: true
+        - AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Name: preferred_username
+          Required: true
+        - AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Name: nickname
           Required: true
       UsernameConfiguration:
         CaseSensitive: true
@@ -45,25 +57,27 @@ Resources:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       ClientName: ${self:provider.stage}-blog-user-pool-client
-      # AllowedOAuthFlows:
-      #   - code
-      #   - implicit
-      # AllowedOAuthScopes:
-      #   - aws.cognito.signin.user.admin
-      # AllowedOAuthFlowsUserPoolClient: true
       ExplicitAuthFlows:
-        - ALLOW_ADMIN_USER_PASSWORD_AUTH
-        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
       CallbackURLs:
         - http://localhost:3000
       DefaultRedirectURI: http://localhost:3000
       LogoutURLs:
         - http://localhost:3000
+      # ユーザーが存在しない場合、認証は、ユーザー名またはパスワードが正しくないことを示すエラーを返す(セキュリティ的に良い)
       PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 7
+      ReadAttributes:
+        - email
+        - preferred_username
+      WriteAttributes: # アプリクライアントが書き込むことができるユーザプール属性(OIDCログイン時に必要となる)
+        - email
+        - preferred_username
+        - nickname
       SupportedIdentityProviders:
         - COGNITO
-      UserPoolId:
+      UserPoolId: # ユーザプールを指定することでユーザの認証トークンを元にユーザグループを判別し適切なSTSを発行できる
         Ref: CognitoUserPool
 
   CognitoUserPoolDomain:
@@ -79,9 +93,10 @@ Resources:
       - ApiGatewayRestApi
     Properties:
       Name: ApiAuthorizer
-      RestApiId:
+      RestApiId: # slsが暗黙的に作成するAPI Gatewayを指定
         Ref: ApiGatewayRestApi
-      IdentitySource: method.request.header.Authorization
       Type: COGNITO_USER_POOLS
-      ProviderARNs:
+      ProviderARNs: # Cognitoユーザプールを指定
         - Fn::GetAtt: [CognitoUserPool, Arn]
+      IdentitySource: method.request.header.Authorization
+      AuthorizerResultTtlInSeconds: 3600

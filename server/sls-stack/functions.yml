@@ -1,0 +1,25 @@
+main:
+  role: BlogBackendRole
+  handler: myapp.main.handler
+  environment:
+    CORS_ALLOWED_ORIGIN: ${self:custom.envFile.CORS_ALLOWED_ORIGIN}
+    DOCS_URL: ${self:custom.envFile.DOCS_URL}
+    REDOCS_URL: ${self:custom.envFile.REDOCS_URL}
+    OPENAPI_URL: ${self:custom.envFile.OPENAPI_URL}
+    TABLE_NAME: ${self:custom.envFile.TABLE_NAME}
+  events:
+    - http:
+        path: /{path+}
+        method: GET
+        private: false
+        cors: true
+    - http:
+        path: /{path+}
+        method: POST
+        private: true
+        cors: true
+        integration: lambda
+        authorizer:
+          type: COGNITO_USER_POOLS
+          authorizerId:
+            Ref: ApiGatewayAuthorizer
