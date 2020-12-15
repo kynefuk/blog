@@ -45,6 +45,36 @@ Resources:
                   - Ref: ApiGatewayRestApi
                   - "/*/POST/"
                   - "${self:provider.apiName}"
+              - Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: ApiGatewayRestApi
+                  - "/*/PATCH/"
+                  - "${self:provider.apiName}"
+              - Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: ApiGatewayRestApi
+                  - "/*/DELETE/"
+                  - "${self:provider.apiName}"
+              - Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:"
+                  - Ref: AWS::Region
+                  - ":"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: ApiGatewayRestApi
+                  - "/*/OPTIONS/"
+                  - "${self:provider.apiName}"
   
   AuthenticatedRole:
     Type: AWS::IAM::Role
