@@ -1,0 +1,181 @@
+openapi: 3.0.2
+info:
+  title: blog
+  version: 0.1.0
+paths:
+  /blogs:
+    get:
+      summary: List Blog
+      operationId: list_blog_blogs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogList'
+    post:
+      summary: Create Blog
+      operationId: create_blog_blogs_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  '/blog/{blog_title}':
+    delete:
+      summary: Delete Blog
+      operationId: delete_blog_blog__blog_title__delete
+      parameters:
+        - required: true
+          schema:
+            title: Blog Title
+            type: string
+          name: blog_title
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      summary: Update Blog
+      operationId: update_blog_blog__blog_title__patch
+      parameters:
+        - required: true
+          schema:
+            title: Blog Title
+            type: string
+          name: blog_title
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogUpdate'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blog'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Blog:
+      title: Blog
+      required:
+        - title
+        - content
+        - created_at
+        - updated_at
+        - is_published
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+        created_at:
+          title: Created At
+          type: string
+          format: date-time
+        updated_at:
+          title: Updated At
+          type: string
+          format: date-time
+        is_published:
+          title: Is Published
+          type: integer
+    BlogCreate:
+      title: BlogCreate
+      required:
+        - title
+        - content
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+    BlogList:
+      title: BlogList
+      type: object
+      properties:
+        blogs:
+          title: Blogs
+          type: array
+          items:
+            $ref: '#/components/schemas/Blog'
+    BlogUpdate:
+      title: BlogUpdate
+      type: object
+      properties:
+        title:
+          title: Title
+          type: string
+          default: ''
+        content:
+          title: Content
+          type: string
+          default: ''
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            type: string
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
