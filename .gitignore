@@ -8,3 +8,4 @@ ddb-data
 .serverless
 *-env.yml
 server/sls-stack/env/*.yml
+.env.*
