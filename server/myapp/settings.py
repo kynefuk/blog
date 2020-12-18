@@ -13,8 +13,8 @@ def init_ddb_local(table_name, region, host=None):
     if host is None and not BlogTable.exists():
         BlogTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
 
+    BlogTable.Meta.host = host
     if host and not BlogTable.exists():
-        BlogTable.Meta.host = host
         BlogTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
 
 

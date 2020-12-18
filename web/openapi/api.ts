@@ -1,5 +1,4 @@
 // tslint:disable
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./custom.d.ts" />
 /**
  * blog
@@ -14,7 +13,6 @@
  */
 
 import * as globalImportUrl from "url";
-
 import { Configuration } from "./configuration";
 import globalAxios, { AxiosPromise, AxiosInstance } from "axios";
 import {
@@ -80,19 +78,6 @@ export interface BlogCreate {
    * @memberof BlogCreate
    */
   content: string;
-}
-/**
- *
- * @export
- * @interface BlogList
- */
-export interface BlogList {
-  /**
-   *
-   * @type {Array<Blog>}
-   * @memberof BlogList
-   */
-  blogs?: Array<Blog>;
 }
 /**
  *
@@ -443,7 +428,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      */
     listBlogBlogsGet(
       options?: any
-    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<BlogList> {
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Blog>> {
       const localVarAxiosArgs = DefaultApiAxiosParamCreator(
         configuration
       ).listBlogBlogsGet(options);

@@ -1,9 +1,10 @@
 from datetime import datetime
 from fastapi import APIRouter, status, HTTPException
 from pynamodb.exceptions import DoesNotExist
+from typing import List
 
-from .schemas import Blog, BlogCreate, BlogList, BlogUpdate
-from .models import BlogTable, BlogIndex
+from .schemas import Blog, BlogCreate, BlogUpdate
+from .models import BlogTable
 
 router = APIRouter()
 
@@ -18,9 +19,9 @@ def get_object_or_404(blog_title: str):
     return updated_blog
 
 
-@router.get("/blogs", response_model=BlogList)
+@router.get("/blogs", response_model=List[Blog])
 def list_blog():
-    blog_list = BlogIndex.query(1)
+    blog_list = BlogTable.scan()
     blog_l = []
     for blog in blog_list:
         b = Blog(**blog.to_dict())

@@ -4,14 +4,14 @@ from pynamodb.models import Model
 from pynamodb.indexes import GlobalSecondaryIndex, KeysOnlyProjection
 
 
-class BlogIndex(GlobalSecondaryIndex):
-    class Meta:
-        projection = KeysOnlyProjection()
-        read_capacity_units = 1
-        write_capacity_units = 1
+# class BlogIndex(GlobalSecondaryIndex):
+#     class Meta:
+#         projection = KeysOnlyProjection()
+#         read_capacity_units = 1
+#         write_capacity_units = 1
 
-    is_published = NumberAttribute(hash_key=True)
-    created_at = UTCDateTimeAttribute(range_key=True)
+#     is_published = NumberAttribute(hash_key=True)
+#     created_at = UTCDateTimeAttribute(range_key=True)
 
 
 class BlogTable(Model):
@@ -25,7 +25,7 @@ class BlogTable(Model):
     created_at = UTCDateTimeAttribute(null=False, default=datetime.now())
     updated_at = UTCDateTimeAttribute(null=False, default=datetime.now())
     is_published = NumberAttribute(default=0, null=False)
-    by_is_published = BlogIndex()
+    # by_is_published = BlogIndex()
 
     def to_dict(self):
         ret_dict = {}

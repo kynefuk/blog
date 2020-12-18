@@ -6,15 +6,15 @@ services:
       target: dev
     ports:
       - '7000:7000'
-    env_file:
-    - ./server.env
     environment:
     - CORS_ALLOWED_ORIGIN=http://localhost:3000
     - DOCS_URL=/docs
     - REDOC_URL=/redoc
     - OPENAPI_URL=/openapi.json
-    # - DB_HOST=http://dynamodb:8001
+    - DB_HOST=http://dynamodb:8081
     - TABLE_NAME=Blogs
+    - AWS_ACCESS_KEY_ID=xxxx
+    - AWS_SECRET_ACCESS_KEY=xxxx
     restart: always
     tty: true
     volumes:

@@ -2,18 +2,23 @@ openapi: 3.0.2
 info:
   title: blog
   version: 0.1.0
+servers:
+  - url: http://localhost:7000
 paths:
   /blogs:
     get:
       summary: List Blog
       operationId: list_blog_blogs_get
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BlogList'
+                title: Response List Blog Blogs Get
+                type: array
+                items:
+                  $ref: "#/components/schemas/Blog"
     post:
       summary: Create Blog
       operationId: create_blog_blogs_post
@@ -21,22 +26,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BlogCreate'
+              $ref: "#/components/schemas/BlogCreate"
         required: true
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blog'
-        '422':
+                $ref: "#/components/schemas/Blog"
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  '/blog/{blog_title}':
+                $ref: "#/components/schemas/HTTPValidationError"
+  "/blog/{blog_title}":
     delete:
       summary: Delete Blog
       operationId: delete_blog_blog__blog_title__delete
@@ -48,17 +53,17 @@ paths:
           name: blog_title
           in: path
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
               schema: {}
-        '422':
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
+                $ref: "#/components/schemas/HTTPValidationError"
     patch:
       summary: Update Blog
       operationId: update_blog_blog__blog_title__patch
@@ -73,21 +78,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BlogUpdate'
+              $ref: "#/components/schemas/BlogUpdate"
         required: true
       responses:
-        '201':
+        "201":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blog'
-        '422':
+                $ref: "#/components/schemas/Blog"
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
+                $ref: "#/components/schemas/HTTPValidationError"
 components:
   schemas:
     Blog:
@@ -130,15 +135,6 @@ components:
         content:
           title: Content
           type: string
-    BlogList:
-      title: BlogList
-      type: object
-      properties:
-        blogs:
-          title: Blogs
-          type: array
-          items:
-            $ref: '#/components/schemas/Blog'
     BlogUpdate:
       title: BlogUpdate
       type: object
@@ -146,11 +142,11 @@ components:
         title:
           title: Title
           type: string
-          default: ''
+          default: ""
         content:
           title: Content
           type: string
-          default: ''
+          default: ""
     HTTPValidationError:
       title: HTTPValidationError
       type: object
@@ -159,7 +155,7 @@ components:
           title: Detail
           type: array
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: "#/components/schemas/ValidationError"
     ValidationError:
       title: ValidationError
       required:

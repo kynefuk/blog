@@ -11,10 +11,6 @@ class Blog(BaseModel):
     is_published: int
 
 
-class BlogList(BaseModel):
-    blogs: Optional[List[Blog]]
-
-
 class BlogCreate(BaseModel):
     title: str
     content: str
