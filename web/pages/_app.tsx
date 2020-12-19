@@ -1,10 +1,11 @@
+import Head from "next/head";
 import "../styles/globals.css";
 import { AppProps } from "next/app";
+import Amplify from "aws-amplify";
 import { CSSReset } from "@chakra-ui/react";
 import { ChakraProvider, Container } from "@chakra-ui/react";
-import Head from "next/head";
-
-import Amplify from "aws-amplify";
+import Header from "../components/Header";
+import ColorToggle from "../components/ColorToggle";
 
 Amplify.configure({
   Auth: {
@@ -12,7 +13,7 @@ Amplify.configure({
     // identityPoolId: process.env.NEXT_PUBLIC_ID_POOL_ID,
     userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID,
     userPoolWebClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID,
-    authenticationFlowType: "USER_SRP_AUTH",
+    authenticationFlowType: process.env.NEXT_AUTHENTICATION_FLOW_TYPE,
   },
 });
 
@@ -23,7 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>My Blog</title>
       </Head>
-      <Container maxWidth="xl" centerContent>
+      <ColorToggle />
+      <Header />
+      <Container width="100%" maxW="xl" centerContent>
         <Component {...pageProps} />
       </Container>
     </ChakraProvider>

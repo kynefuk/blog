@@ -22,10 +22,8 @@ class BlogTable(Model):
 
     title = UnicodeAttribute(hash_key=True, null=False)
     content = UnicodeAttribute(null=False, default="")
-    created_at = UTCDateTimeAttribute(null=False, default=datetime.now())
-    updated_at = UTCDateTimeAttribute(null=False, default=datetime.now())
-    is_published = NumberAttribute(default=0, null=False)
-    # by_is_published = BlogIndex()
+    created = UTCDateTimeAttribute(null=False, default=datetime.now())
+    updated = UTCDateTimeAttribute(null=False, default=datetime.now())
 
     def to_dict(self):
         ret_dict = {}

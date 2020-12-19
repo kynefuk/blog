@@ -31,7 +31,7 @@ def list_blog():
 
 @router.post("/blogs", response_model=Blog)
 def create_blog(blog: BlogCreate):
-    created = BlogTable(blog.title, content=blog.content, is_published=1)
+    created = BlogTable(blog.title, content=blog.content)
     created.save()
     d = created.to_dict()
     blog = Blog(**d)
@@ -44,7 +44,7 @@ def update_blog(blog_title: str, data: BlogUpdate):
     target = get_object_or_404(blog_title)
 
     if data.title != blog_title:
-        created = BlogTable(data.title, content=data.content, is_published=1)
+        created = BlogTable(data.title, content=data.content)
         target.delete()
         created.save()
         return Blog(**created.to_dict())
@@ -52,7 +52,7 @@ def update_blog(blog_title: str, data: BlogUpdate):
     target.update(
         actions=[
             BlogTable.content.set(data.content),
-            BlogTable.updated_at.set(datetime.now()),
+            BlogTable.updated.set(datetime.now()),
         ]
     )
     blog = Blog(**target.to_dict())

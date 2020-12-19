@@ -1,11 +1,19 @@
+import React from "react";
 import { useEffect, useState, useMemo } from "react";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { withSSRContext, Auth } from "aws-amplify";
-import { Box, Text, Heading, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Heading,
+  Stack,
+  VStack,
+  StackDivider,
+} from "@chakra-ui/react";
 import { DefaultApi, Blog } from "../openapi/api";
 import useSWR from "swr";
-import { apiResolver } from "next/dist/next-server/server/api-utils";
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
 //   const SSR = withSSRContext(context);
@@ -38,28 +46,24 @@ function Home() {
 
   return (
     <>
-      <Heading>nam dev</Heading>
       {data ? (
-        <>
+        <VStack
+          mt="50px"
+          spacing={8}
+          divider={<StackDivider borderColor="gray.200" />}
+        >
+          <Heading>Posts</Heading>
           {data.map((blog) => (
-            <Stack spacing={8} key={blog.title}>
-              <Box
-                w="100%"
-                maxW="lg"
-                borderWidth="1px"
-                borderRadius="lg"
-                mt="10"
-              >
-                <Heading as="h2" textAlign="center">
-                  {blog.title}
-                </Heading>
-                <Text align="center" isTruncated mt="10">
-                  {blog.content}
-                </Text>
-              </Box>
-            </Stack>
+            <React.Fragment key={blog.title}>
+              <Heading as="h3" size="md" textAlign="center">
+                <Link href="/">{blog.title}</Link>
+              </Heading>
+              <Text size="sm" color="GrayText" mt="5px">
+                {blog.created}
+              </Text>
+            </React.Fragment>
           ))}
-        </>
+        </VStack>
       ) : (
         <h1>ブログがありません</h1>
       )}

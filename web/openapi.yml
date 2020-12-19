@@ -100,9 +100,8 @@ components:
       required:
         - title
         - content
-        - created_at
-        - updated_at
-        - is_published
+        - created
+        - updated
       type: object
       properties:
         title:
@@ -111,17 +110,14 @@ components:
         content:
           title: Content
           type: string
-        created_at:
-          title: Created At
+        created:
+          title: Created
           type: string
           format: date-time
-        updated_at:
-          title: Updated At
+        updated:
+          title: Updated
           type: string
           format: date-time
-        is_published:
-          title: Is Published
-          type: integer
     BlogCreate:
       title: BlogCreate
       required:
