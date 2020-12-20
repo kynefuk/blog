@@ -6,6 +6,8 @@ import { CSSReset } from "@chakra-ui/react";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import Header from "../components/Header";
 import ColorToggle from "../components/ColorToggle";
+import { SWRConfig } from "swr";
+import axios from "axios";
 
 Amplify.configure({
   Auth: {
@@ -20,15 +22,21 @@ Amplify.configure({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
-      <CSSReset />
-      <Head>
-        <title>My Blog</title>
-      </Head>
-      <ColorToggle />
-      <Header />
-      <Container width="100%" maxW="xl" centerContent>
-        <Component {...pageProps} />
-      </Container>
+      <SWRConfig
+        value={{
+          fetcher: (url: string) => axios.get(url),
+        }}
+      >
+        <CSSReset />
+        <Head>
+          <title>My Blog</title>
+        </Head>
+        <ColorToggle />
+        <Header />
+        <Container width="100%" maxW="xl" centerContent>
+          <Component {...pageProps} />
+        </Container>
+      </SWRConfig>
     </ChakraProvider>
   );
 }

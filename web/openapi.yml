@@ -113,11 +113,9 @@ components:
         created:
           title: Created
           type: string
-          format: date-time
         updated:
           title: Updated
           type: string
-          format: date-time
     BlogCreate:
       title: BlogCreate
       required:

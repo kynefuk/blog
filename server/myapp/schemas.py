@@ -6,8 +6,8 @@ from typing import List, Optional
 class Blog(BaseModel):
     title: str
     content: str
-    created: datetime
-    updated: datetime
+    created: str
+    updated: str
 
 
 class BlogCreate(BaseModel):

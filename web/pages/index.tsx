@@ -1,65 +1,40 @@
 import React from "react";
-import { useEffect, useState, useMemo } from "react";
-import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { withSSRContext, Auth } from "aws-amplify";
-import {
-  Box,
-  Text,
-  Heading,
-  Stack,
-  VStack,
-  StackDivider,
-} from "@chakra-ui/react";
-import { DefaultApi, Blog } from "../openapi/api";
+import { Text, Heading, VStack, StackDivider } from "@chakra-ui/react";
+import { Blog } from "../openapi/api";
+import { BASE_PATH } from "../openapi/base";
 import useSWR from "swr";
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const SSR = withSSRContext(context);
-//   console.log(context);
-//   try {
-//     // const user = Auth.signIn();
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   return {
-//     props: {},
-//   };
-// };
+import toDate from "../lib/date-util";
+import { AxiosResponse } from "axios";
 
 function Home() {
-  const api = useMemo(() => {
-    return new DefaultApi();
-  }, []);
-  //const { data, error } = useSWR("/blogs", api.listBlogBlogsGet);
-  const [data, setBlogs] = useState<Blog[]>([]);
-  useEffect(() => {
-    const getBlogs = async () => {
-      const response = await api.listBlogBlogsGet();
-      if (response.data) {
-        setBlogs(response.data);
-      }
-    };
-    getBlogs();
-  }, [api]);
+  const { data, error } = useSWR<AxiosResponse<Blog[]>>(`${BASE_PATH}/blogs`);
+  if (error) {
+    console.log(error);
+    return <h1> Error </h1>;
+  }
+  if (!data) {
+    return <h1>Loading...</h1>;
+  }
 
+  const blogs = data.data;
   return (
     <>
-      {data ? (
+      {blogs ? (
         <VStack
           mt="50px"
           spacing={8}
           divider={<StackDivider borderColor="gray.200" />}
         >
           <Heading>Posts</Heading>
-          {data.map((blog) => (
+          {blogs.map((blog) => (
             <React.Fragment key={blog.title}>
               <Heading as="h3" size="md" textAlign="center">
                 <Link href="/">{blog.title}</Link>
               </Heading>
               <Text size="sm" color="GrayText" mt="5px">
-                {blog.created}
+                {toDate(blog.created)}
               </Text>
             </React.Fragment>
           ))}

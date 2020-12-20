@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.0.0",
     "aws-amplify": "^3.3.12",
     "aws-amplify-react": "^4.2.16",
+    "axios": "^0.21.0",
     "date-fns": "^2.16.1",
     "framer-motion": "^2.9.5",
     "next": "10.0.3",
