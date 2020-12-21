@@ -4,21 +4,23 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Text, Heading, VStack, StackDivider } from "@chakra-ui/react";
 import { Blog } from "../openapi/api";
 import { BASE_PATH } from "../openapi/base";
-import useSWR from "swr";
 import toDate from "../lib/date-util";
-import { AxiosResponse } from "axios";
+import { useRequest } from "../lib/fetcher";
 
 function Home() {
-  const { data, error } = useSWR<AxiosResponse<Blog[]>>(`${BASE_PATH}/blogs`);
+  const { response, error } = useRequest<Blog[]>({
+    url: `${BASE_PATH}/blogs`,
+    method: "GET",
+  });
   if (error) {
     console.log(error);
     return <h1> Error </h1>;
   }
-  if (!data) {
+  if (!response) {
     return <h1>Loading...</h1>;
   }
 
-  const blogs = data.data;
+  const blogs = response.data;
   return (
     <>
       {blogs ? (
