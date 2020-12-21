@@ -9,14 +9,14 @@ from .models import BlogTable
 router = APIRouter()
 
 
-def get_object_or_404(blog_title: str):
+def get_object_or_404(blog_title: str) -> BlogTable:
     try:
-        updated_blog = BlogTable.get(blog_title)
+        obj = BlogTable.get(blog_title)
     except DoesNotExist:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="blog not found."
         )
-    return updated_blog
+    return obj
 
 
 @router.get("/blogs", response_model=List[Blog])
@@ -36,6 +36,12 @@ def create_blog(blog: BlogCreate):
     d = created.to_dict()
     blog = Blog(**d)
     return blog
+
+
+@router.get("/blogs/{blog_title}", response_model=Blog)
+def get_blog(blog_title: str):
+    target = get_object_or_404(blog_title)
+    return Blog(**target.to_dict())
 
 
 @router.patch("/blog/{blog_title}", response_model=Blog, status_code=201)
