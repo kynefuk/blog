@@ -41,6 +41,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HTTPValidationError"
+  "/blogs/{blog_title}":
+    get:
+      summary: Get Blog
+      operationId: get_blog_blogs__blog_title__get
+      parameters:
+        - required: true
+          schema:
+            title: Blog Title
+            type: string
+          name: blog_title
+          in: path
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Blog"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
   "/blog/{blog_title}":
     delete:
       summary: Delete Blog

@@ -1,5 +1,4 @@
 // tslint:disable
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./custom.d.ts" />
 /**
  * blog
@@ -251,6 +250,58 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Get Blog
+     * @param {string} blogTitle
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogTitleGet(
+      blogTitle: string,
+      options: any = {}
+    ): RequestArgs {
+      // verify required parameter 'blogTitle' is not null or undefined
+      if (blogTitle === null || blogTitle === undefined) {
+        throw new RequiredError(
+          "blogTitle",
+          "Required parameter blogTitle was null or undefined when calling getBlogBlogsBlogTitleGet."
+        );
+      }
+      const localVarPath = `/blogs/{blog_title}`.replace(
+        `{${"blog_title"}}`,
+        encodeURIComponent(String(blogTitle))
+      );
+      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarUrlObj.query = {
+        ...localVarUrlObj.query,
+        ...localVarQueryParameter,
+        ...options.query,
+      };
+      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+      delete localVarUrlObj.search;
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...options.headers,
+      };
+
+      return {
+        url: globalImportUrl.format(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary List Blog
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -417,6 +468,31 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Get Blog
+     * @param {string} blogTitle
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogTitleGet(
+      blogTitle: string,
+      options?: any
+    ): (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Blog> {
+      const localVarAxiosArgs = DefaultApiAxiosParamCreator(
+        configuration
+      ).getBlogBlogsBlogTitleGet(blogTitle, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *
      * @summary List Blog
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -506,6 +582,19 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Get Blog
+     * @param {string} blogTitle
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBlogBlogsBlogTitleGet(blogTitle: string, options?: any) {
+      return DefaultApiFp(configuration).getBlogBlogsBlogTitleGet(
+        blogTitle,
+        options
+      )(axios, basePath);
+    },
+    /**
+     *
      * @summary List Blog
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -570,6 +659,21 @@ export class DefaultApi extends BaseAPI {
    */
   public deleteBlogBlogBlogTitleDelete(blogTitle: string, options?: any) {
     return DefaultApiFp(this.configuration).deleteBlogBlogBlogTitleDelete(
+      blogTitle,
+      options
+    )(this.axios, this.basePath);
+  }
+
+  /**
+   *
+   * @summary Get Blog
+   * @param {string} blogTitle
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getBlogBlogsBlogTitleGet(blogTitle: string, options?: any) {
+    return DefaultApiFp(this.configuration).getBlogBlogsBlogTitleGet(
       blogTitle,
       options
     )(this.axios, this.basePath);

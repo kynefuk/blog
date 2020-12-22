@@ -1,5 +1,4 @@
 // tslint:disable
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./custom.d.ts" />
 /**
  * blog
@@ -17,7 +16,6 @@ import { Configuration } from "./configuration";
 import globalAxios, { AxiosPromise, AxiosInstance } from "axios";
 
 export const BASE_PATH = "http://localhost:7000".replace(/\/+$/, "");
-
 /**
  *
  * @export
