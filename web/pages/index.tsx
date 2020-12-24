@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
 import { Text, Heading, VStack, StackDivider } from "@chakra-ui/react";
-import { Blog, DefaultApi } from "../openapi/api";
+import { Blog } from "../openapi/api";
 import { BASE_PATH } from "../openapi/base";
 import toDate from "../lib/date-util";
 import { useRequest } from "../lib/fetcher";

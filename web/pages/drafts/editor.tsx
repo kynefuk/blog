@@ -1,27 +1,52 @@
-import ReactDOMServer from "react-dom/server";
 import { useState } from "react";
-import SimpleMED from "react-simplemde-editor";
-import SyntaxHighlightRenderer from "../posts/[title]";
-import ReactMarkdown from "react-markdown";
+import { useRouter } from "next/router";
+import { MarkdownEditor } from "../../components/MarkdownEditor";
+import { Button, Container, FormControl } from "@chakra-ui/react";
+import { useApi } from "../../hooks/useApi";
+import { BlogCreate } from "../../openapi/api";
 
 const Editor = () => {
+  const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("test");
+  const [loading, setLoading] = useState(false);
+  const { api } = useApi();
+  const router = useRouter();
+
+  const handleOnSubmit = async () => {
+    setLoading(true);
+    const inputData: BlogCreate = { title: title, content: markdown };
+    try {
+      const response = await api.createBlogBlogsPost(inputData);
+      setLoading(false);
+      if (response.status !== 201) {
+        console.log("failed to post blog");
+      }
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <>
-      <SimpleMED
-        value={markdown}
-        onChange={(e) => setMarkdown(e)}
-        options={{
-          previewRender(text) {
-            return ReactDOMServer.renderToString(
-              <ReactMarkdown
-                source={text}
-                renderers={{ code: SyntaxHighlightRenderer }}
-              />
-            );
-          },
-        }}
-      />
+      <Container>
+        <MarkdownEditor
+          title={title}
+          setTitle={setTitle}
+          markdown={markdown}
+          setMarkdown={setMarkdown}
+        />
+        <FormControl onSubmit={handleOnSubmit}>
+          <Button
+            colorScheme="blue"
+            isLoading={loading}
+            onClick={handleOnSubmit}
+          >
+            Save
+          </Button>
+        </FormControl>
+      </Container>
     </>
   );
 };

@@ -2,25 +2,7 @@ import { GetStaticProps, GetStaticPaths } from "next";
 import { Blog } from "../../openapi/api";
 import { Container, Heading } from "@chakra-ui/react";
 import { getAllBlog, getBlog } from "../../lib/getStatic";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import prism from "react-syntax-highlighter/dist/cjs/styles/prism/prism";
-
-interface SyntaxHighlighterProps {
-  value: string;
-  language: string;
-}
-
-export const SyntaxHighlightRenderer: React.FC<SyntaxHighlighterProps> = ({
-  value,
-  language,
-}) => {
-  return (
-    <SyntaxHighlighter language={language} style={prism}>
-      {value}
-    </SyntaxHighlighter>
-  );
-};
+import { Markdown } from "../../components/Markdown";
 
 const Post: React.FC<Blog> = (props: Blog) => {
   return (
@@ -28,10 +10,7 @@ const Post: React.FC<Blog> = (props: Blog) => {
       <Heading as="h1" size="4xl" mb="20px">
         {props.title}
       </Heading>
-      <ReactMarkdown
-        source={props.content}
-        renderers={{ code: SyntaxHighlightRenderer }}
-      />
+      <Markdown content={props.content} />
     </Container>
   );
 };

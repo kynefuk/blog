@@ -33,9 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Head>
         <ColorToggle />
         <Header />
-        <Container width="100%" maxW="xl" centerContent>
-          <Component {...pageProps} />
-        </Container>
+        <Component {...pageProps} />
       </SWRConfig>
     </ChakraProvider>
   );
