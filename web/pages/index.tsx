@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
 import { Text, Heading, VStack, StackDivider } from "@chakra-ui/react";
@@ -6,15 +6,16 @@ import { Blog } from "../openapi/api";
 import { BASE_PATH } from "../openapi/base";
 import toDate from "../lib/date-util";
 import { useRequest } from "../lib/fetcher";
+import { Error } from "../components/Error";
 
 const Home = () => {
   const { response, error } = useRequest<Blog[]>({
     url: `${BASE_PATH}/blogs`,
     method: "GET",
   });
+  const [err, setErr] = useState("");
   if (error) {
-    console.log(error);
-    return <h1> Error </h1>;
+    return <Error error={err} setError={setErr} />;
   }
   if (!response) {
     return <h1>Loading...</h1>;

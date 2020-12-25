@@ -1,16 +1,26 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { MarkdownEditor } from "../../components/MarkdownEditor";
-import { Button, Container, FormControl } from "@chakra-ui/react";
+import { Button, Container } from "@chakra-ui/react";
 import { useApi } from "../../hooks/useApi";
 import { BlogCreate } from "../../openapi/api";
+import { Error } from "../../components/Error";
 
 const Editor = () => {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("test");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { api } = useApi();
   const router = useRouter();
+
+  const DisplayError = () => {
+    if (error) {
+      return <Error error={error} setError={setError} />;
+    } else {
+      return null;
+    }
+  };
 
   const handleOnSubmit = async () => {
     setLoading(true);
@@ -19,33 +29,28 @@ const Editor = () => {
       const response = await api.createBlogBlogsPost(inputData);
       setLoading(false);
       if (response.status !== 201) {
-        console.log("failed to post blog");
+        setError("failed to post blog");
       }
       router.push("/");
     } catch (err) {
-      console.log(err);
+      setError(err);
     } finally {
       setLoading(false);
     }
   };
   return (
     <>
-      <Container>
+      <Container mt="100px">
+        <DisplayError />
         <MarkdownEditor
           title={title}
           setTitle={setTitle}
           markdown={markdown}
           setMarkdown={setMarkdown}
         />
-        <FormControl onSubmit={handleOnSubmit}>
-          <Button
-            colorScheme="blue"
-            isLoading={loading}
-            onClick={handleOnSubmit}
-          >
-            Save
-          </Button>
-        </FormControl>
+        <Button colorScheme="blue" isLoading={loading} onClick={handleOnSubmit}>
+          Save
+        </Button>
       </Container>
     </>
   );

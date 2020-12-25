@@ -32,8 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           <title>My Blog</title>
         </Head>
         <ColorToggle />
-        <Header />
-        <Component {...pageProps} />
+        <Container>
+          <Header />
+          <Component {...pageProps} />
+        </Container>
       </SWRConfig>
     </ChakraProvider>
   );
