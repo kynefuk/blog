@@ -5,6 +5,7 @@ import { Button, Container } from "@chakra-ui/react";
 import { useApi } from "../../hooks/useApi";
 import { BlogCreate } from "../../openapi/api";
 import { Error } from "../../components/Error";
+import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
 
 const Editor = () => {
   const [title, setTitle] = useState("");
@@ -39,7 +40,7 @@ const Editor = () => {
     }
   };
   return (
-    <>
+    <AmplifyAuthenticator>
       <Container mt="100px">
         <DisplayError />
         <MarkdownEditor
@@ -52,7 +53,7 @@ const Editor = () => {
           Save
         </Button>
       </Container>
-    </>
+    </AmplifyAuthenticator>
   );
 };
 
