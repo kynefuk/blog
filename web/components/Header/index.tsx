@@ -1,8 +1,26 @@
-import { Heading, Text, Box, Container } from "@chakra-ui/react";
+import Link from "next/link";
+import { Heading, Text, Box, Container, SimpleGrid } from "@chakra-ui/react";
+import ColorToggle from "../ColorToggle/index";
+import { GoMarkGithub } from "react-icons/go";
 
 const Header = () => {
   return (
     <>
+      <SimpleGrid columns={4}>
+        <Box>nam dev</Box>
+        <Box>
+          <Link href="https://github.com" passHref={true}>
+            <a>
+              <GoMarkGithub />
+            </a>
+          </Link>
+        </Box>
+        <Box></Box>
+        <Box>
+          <ColorToggle />
+        </Box>
+      </SimpleGrid>
+
       <Container>
         <Box>
           <Heading textAlign="center" as="h1" size="4xl">

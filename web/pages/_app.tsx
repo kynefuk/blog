@@ -5,7 +5,6 @@ import Amplify from "aws-amplify";
 import { CSSReset } from "@chakra-ui/react";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 import Header from "../components/Header";
-import ColorToggle from "../components/ColorToggle";
 import { SWRConfig } from "swr";
 import axios from "axios";
 
@@ -31,7 +30,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>My Blog</title>
         </Head>
-        <ColorToggle />
         <Container>
           <Header />
           <Component {...pageProps} />
