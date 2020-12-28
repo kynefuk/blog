@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>My Blog</title>
         </Head>
-        <Container>
+        <Container maxWidth="4xl">
           <Header />
           <Component {...pageProps} />
         </Container>

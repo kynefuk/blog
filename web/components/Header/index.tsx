@@ -1,25 +1,62 @@
 import Link from "next/link";
-import { Heading, Text, Box, Container, SimpleGrid } from "@chakra-ui/react";
+import {
+  Heading,
+  Text,
+  Box,
+  Button,
+  Container,
+  Spacer,
+  Flex,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerCloseButton,
+  DrawerFooter,
+  useDisclosure,
+  DrawerContent,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
+import { AmplifySignOut } from "@aws-amplify/ui-react";
 import ColorToggle from "../ColorToggle/index";
 import { GoMarkGithub } from "react-icons/go";
+import { FiLogOut } from "react-icons/fi";
 
 const Header = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <SimpleGrid columns={4}>
+      <Flex height="10" p="4">
         <Box>nam dev</Box>
-        <Box>
+        <Spacer />
+        <Box mr="10">
           <Link href="https://github.com" passHref={true}>
             <a>
-              <GoMarkGithub />
+              <GoMarkGithub size="24" />
             </a>
           </Link>
         </Box>
-        <Box></Box>
         <Box>
           <ColorToggle />
         </Box>
-      </SimpleGrid>
+        <Box onClick={onOpen}>
+          <Button>Settings</Button>
+          <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xs">
+            <DrawerOverlay>
+              <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader>Hoge</DrawerHeader>
+                <DrawerBody>
+                  <ChakraLink href="/">
+                    <AmplifySignOut />
+                  </ChakraLink>
+                </DrawerBody>
+                <DrawerFooter>Footer</DrawerFooter>
+              </DrawerContent>
+            </DrawerOverlay>
+          </Drawer>
+        </Box>
+      </Flex>
 
       <Container>
         <Box>
