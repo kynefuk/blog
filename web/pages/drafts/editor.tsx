@@ -4,20 +4,20 @@ import { MarkdownEditor } from "../../components/MarkdownEditor";
 import { Button, Container } from "@chakra-ui/react";
 import { useApi } from "../../hooks/useApi";
 import { BlogCreate } from "../../openapi/api";
-import { Error } from "../../components/Error";
+import { Message } from "../../components/Message";
 import { AmplifyAuthenticator } from "@aws-amplify/ui-react";
 
 const Editor = () => {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("test");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const { api } = useApi();
   const router = useRouter();
 
   const DisplayError = () => {
-    if (error) {
-      return <Error error={error} setError={setError} />;
+    if (message) {
+      return <Message message={message} setMessage={setMessage} />;
     } else {
       return null;
     }
@@ -30,11 +30,11 @@ const Editor = () => {
       const response = await api.createBlogBlogsPost(inputData);
       setLoading(false);
       if (response.status !== 201) {
-        setError("failed to post blog");
+        setMessage("failed to post blog");
       }
       router.push("/");
     } catch (err) {
-      setError(err);
+      setMessage(err);
     } finally {
       setLoading(false);
     }

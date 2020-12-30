@@ -38,9 +38,6 @@ const Header = () => {
 
       <Container>
         <Box textAlign="center">
-          {/* <Heading textAlign="center" as="h1" size="4xl">
-            <Link href="/">nam dev</Link>
-          </Heading> */}
           <Text fontSize="s" pt="50px">
             技術ブログをなにか書きます。
           </Text>

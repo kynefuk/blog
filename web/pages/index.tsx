@@ -6,7 +6,7 @@ import { Blog } from "../openapi/api";
 import { BASE_PATH } from "../openapi/base";
 import toDate from "../lib/date-util";
 import { useRequest } from "../lib/fetcher";
-import { Error } from "../components/Error";
+import { Message, AlertStatus } from "../components/Message";
 import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useApi } from "../hooks/useApi";
@@ -18,7 +18,7 @@ const Home = () => {
     method: "GET",
   });
   const { api } = useApi();
-  const [err, setErr] = useState("");
+  const [message, setMessage] = useState({ status: "info", message: "" });
   const [isLoggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
 
@@ -40,15 +40,22 @@ const Home = () => {
     try {
       const response = await api.deleteBlogBlogBlogTitleDelete(title);
       if (response.status !== 204) {
-        console.log(err);
+        console.log(message);
       }
+      setMessage({ status: "success", message: "success to delete blog!!!" });
     } catch (err) {
       console.log(err);
     }
   };
 
   if (error) {
-    return <Error error={err} setError={setErr} />;
+    return (
+      <Message
+        status={message.status as AlertStatus}
+        message={message.message}
+        setMessage={setMessage}
+      />
+    );
   }
   if (!response) {
     return <Loading />;
@@ -57,6 +64,15 @@ const Home = () => {
   const blogs = response.data;
   return (
     <>
+      {message.message ? (
+        <Message
+          status={message.status as AlertStatus}
+          message={message.message}
+          setMessage={setMessage}
+        />
+      ) : (
+        <></>
+      )}
       {blogs ? (
         <VStack
           mt="50px"
