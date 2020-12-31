@@ -7,6 +7,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import Header from "../components/Header";
 import { SWRConfig } from "swr";
 import axios from "axios";
+import { MessageProvider } from "../context/message";
 
 Amplify.configure({
   Auth: {
@@ -30,10 +31,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>My Blog</title>
         </Head>
-        <Container maxWidth="4xl">
-          <Header />
-          <Component {...pageProps} />
-        </Container>
+        <MessageProvider>
+          <Container maxWidth="4xl">
+            <Header />
+            <Component {...pageProps} />
+          </Container>
+        </MessageProvider>
       </SWRConfig>
     </ChakraProvider>
   );

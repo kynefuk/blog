@@ -14,7 +14,7 @@ interface MessageProps {
   message: string;
   setMessage: React.Dispatch<
     React.SetStateAction<{
-      status: string;
+      status: AlertStatus;
       message: string;
     }>
   >;
@@ -30,7 +30,7 @@ export const Message = ({ status, message, setMessage }: MessageProps) => {
         position="absolute"
         right="8px"
         top="8px"
-        onClick={() => setMessage("")}
+        onClick={() => setMessage({ status: "success", message: "" })}
       />
     </Alert>
   );
