@@ -7,7 +7,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import Header from "../components/Header";
 import { SWRConfig } from "swr";
 import axios from "axios";
-import { MessageProvider } from "../context/message";
+import { MessageProvider } from "../contexts/message";
 
 Amplify.configure({
   Auth: {

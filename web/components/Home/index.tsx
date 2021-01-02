@@ -11,7 +11,10 @@ import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useApi } from "../../hooks/useApi";
 import { Loading } from "../../components/Loading";
-import { useMessageContext, useSetMessageContext } from "../../context/message";
+import {
+  useMessageContext,
+  useSetMessageContext,
+} from "../../contexts/message";
 
 const Home = () => {
   const { response, error } = useRequest<Blog[]>({

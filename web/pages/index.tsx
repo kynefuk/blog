@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Home from "../components/Home";
 import { Message } from "../components/Message";
-import { useMessageContext, useSetMessageContext } from "../context/message";
+import { useMessageContext, useSetMessageContext } from "../contexts/message";
 
 const App = () => {
   const message = useMessageContext();
