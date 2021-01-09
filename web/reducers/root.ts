@@ -1,6 +1,6 @@
 import { Blog } from "../openapi/api";
 
-export const enum MessageActionType {
+export enum MessageActionType {
   ADD = "message/add",
   DELETE = "message/delete",
 }
@@ -27,14 +27,14 @@ export const MessageReducer = (state = "", action: MessageAction) => {
   }
 };
 
-export const enum BlogListActionType {
+export enum BlogListActionType {
   ADD = "blogs/add",
   DELETE = "blogs/delete",
 }
 
 export type BlogListAction = {
   type: BlogListActionType;
-  payload: Blog | Blog[];
+  payload: Blog[];
 };
 
 export const BlogListReducer = (state: Blog[] = [], action: BlogListAction) => {
@@ -45,7 +45,7 @@ export const BlogListReducer = (state: Blog[] = [], action: BlogListAction) => {
       return action.payload;
     }
     case BlogListActionType.DELETE: {
-      const deletedBlog = action.payload as Blog;
+      const deletedBlog = action.payload[0];
       if (localStorage.getItem("blogs")) {
         const updatedBlogs = state.filter((b) => b.title !== deletedBlog.title);
         return updatedBlogs;

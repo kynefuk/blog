@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import { SWRConfig } from "swr";
 import axios from "axios";
 import { MessageProvider } from "../contexts/message";
+import { BlogListProvider } from "../contexts/blog";
 
 Amplify.configure({
   Auth: {
@@ -31,12 +32,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>My Blog</title>
         </Head>
-        <MessageProvider>
-          <Container maxWidth="4xl">
-            <Header />
-            <Component {...pageProps} />
-          </Container>
-        </MessageProvider>
+        <BlogListProvider>
+          <MessageProvider>
+            <Container maxWidth="4xl">
+              <Header />
+              <Component {...pageProps} />
+            </Container>
+          </MessageProvider>
+        </BlogListProvider>
       </SWRConfig>
     </ChakraProvider>
   );

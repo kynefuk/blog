@@ -7,21 +7,26 @@ export type BlogListContextType = {
   dispatchBlogList: React.Dispatch<BlogListAction>;
 };
 
-const BlogListContext = createContext<BlogListContextType>({
-  blogs: localStorage.getItem("blogs")
-    ? JSON.parse(localStorage.getItem("blogs")!)
-    : [],
+export const initialValue = {
+  blogs:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("blogs") || "")
+      : [],
   dispatchBlogList: () => {},
-});
+};
+
+const BlogListContext = createContext<BlogListContextType>(initialValue);
 
 export const useBlogListContext = () => {
   return useContext(BlogListContext);
 };
 
-export const BlogListProvider: React.FC = () => {
-  const storedBlogList: Blog[] = localStorage.getItem("blogs")
-    ? JSON.parse(localStorage.getItem("blogs")!)
-    : [];
+export const BlogListProvider: React.FC = ({ children }) => {
+  const storedBlogList: Blog[] = initialValue.blogs;
   const [blogs, dispatchBlogList] = useReducer(BlogListReducer, storedBlogList);
-  return <></>;
+  return (
+    <BlogListContext.Provider value={{ blogs, dispatchBlogList }}>
+      {children}
+    </BlogListContext.Provider>
+  );
 };
