@@ -3,6 +3,7 @@ import { Blog } from "../../openapi/api";
 import { Container, Heading } from "@chakra-ui/react";
 import { getAllBlog, getBlog } from "../../lib/getStatic";
 import { Markdown } from "../../components/Markdown";
+import { useBlogListContext } from "../../contexts/blog";
 
 const Post: React.FC<Blog> = (props: Blog) => {
   return (
@@ -19,6 +20,7 @@ export default Post;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getAllBlog();
+
   return { paths, fallback: false };
 };
 

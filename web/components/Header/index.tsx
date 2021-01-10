@@ -27,7 +27,7 @@ const Header = () => {
           </a>
         </Box>
         <Box mr="10">
-          <Link href="/drafts/editor">
+          <Link href="/drafts/create">
             <ChevronRightIcon />
           </Link>
         </Box>

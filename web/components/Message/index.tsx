@@ -6,32 +6,40 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
+import {
+  useDataFetchContext,
+  dataFetchContextType,
+} from "../../contexts/dataFetch";
+import { DataFetchActionType } from "../../reducers/dataFetch";
 
-export type AlertStatus = "error" | "success" | "warning" | "info";
-
-interface MessageProps {
-  status: AlertStatus;
-  message: string;
-  setMessage: React.Dispatch<
-    React.SetStateAction<{
-      status: AlertStatus;
-      message: string;
-    }>
-  >;
-}
-
-export const Message = ({ status, message, setMessage }: MessageProps) => {
+export const Message = () => {
+  const { status, message, dispatchDataFetch } = useDataFetchContext();
   return (
-    <Alert status={status}>
-      <AlertIcon />
-      <AlertTitle mr={2}>Error</AlertTitle>
-      <AlertDescription>{message}</AlertDescription>
-      <CloseButton
-        position="absolute"
-        right="8px"
-        top="8px"
-        onClick={() => setMessage({ status: "success", message: "" })}
-      />
-    </Alert>
+    <>
+      {message ? (
+        <Alert status={status}>
+          <AlertIcon />
+          <AlertTitle mr={2}>{status}</AlertTitle>
+          <AlertDescription>{message}</AlertDescription>
+          <CloseButton
+            position="absolute"
+            right="8px"
+            top="8px"
+            onClick={() =>
+              dispatchDataFetch({
+                type: DataFetchActionType.DELET_MESSAGE,
+                payload: {
+                  isLoading: false,
+                  status: "success",
+                  message: "",
+                } as dataFetchContextType,
+              })
+            }
+          />
+        </Alert>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };

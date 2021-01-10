@@ -7,7 +7,7 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import Header from "../components/Header";
 import { SWRConfig } from "swr";
 import axios from "axios";
-import { MessageProvider } from "../contexts/message";
+import { DataFetchProvider } from "../contexts/dataFetch";
 import { BlogListProvider } from "../contexts/blog";
 
 Amplify.configure({
@@ -33,12 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           <title>My Blog</title>
         </Head>
         <BlogListProvider>
-          <MessageProvider>
+          <DataFetchProvider>
             <Container maxWidth="4xl">
               <Header />
               <Component {...pageProps} />
             </Container>
-          </MessageProvider>
+          </DataFetchProvider>
         </BlogListProvider>
       </SWRConfig>
     </ChakraProvider>

@@ -2,29 +2,28 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Text, Heading, VStack, StackDivider, Button } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Blog } from "../../openapi/api";
-import { BASE_PATH } from "../../openapi/base";
 import toDate from "../../lib/date-util";
-import { useRequest } from "../../lib/fetcher";
-import { Message, AlertStatus } from "../../components/Message";
 import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useApi } from "../../hooks/useApi";
-import { Loading } from "../../components/Loading";
 import {
-  useMessageContext,
-  useSetMessageContext,
-} from "../../contexts/message";
+  dataFetchContextType,
+  useDataFetchContext,
+} from "../../contexts/dataFetch";
+import { DataFetchActionType } from "../../reducers/dataFetch";
+import { useBlogListContext } from "../../contexts/blog";
+import { BlogListActionType } from "../../reducers/root";
 
 const Home = () => {
-  const { response, error } = useRequest<Blog[]>({
-    url: `${BASE_PATH}/blogs`,
-    method: "GET",
-  });
+  // const { response, error } = useRequest<Blog[]>({
+  //   url: `${BASE_PATH}/blogs`,
+  //   method: "GET",
+  // });
+  const { blogs, dispatchBlogList } = useBlogListContext();
+  const { dispatchDataFetch } = useDataFetchContext();
   const { api } = useApi();
   const [isLoggedIn, setLoggedIn] = useState(false);
   const router = useRouter();
-  const setMessage = useSetMessageContext();
 
   useEffect(() => {
     const isUserLoggedIn = async () => {
@@ -42,26 +41,51 @@ const Home = () => {
 
   const handleOnDeleteClick = async (title: string) => {
     try {
+      dispatchDataFetch({
+        type: DataFetchActionType.FETCH_INIT,
+        payload: {
+          isLoading: true,
+          status: "success",
+          message: "",
+        } as dataFetchContextType,
+      });
       const response = await api.deleteBlogBlogBlogTitleDelete(title);
       if (response.status !== 204) {
-        setMessage({ status: "error", message: "failed to delete blog!!!" });
+        dispatchDataFetch({
+          type: DataFetchActionType.FETCH_ERROR,
+          payload: {
+            isLoading: false,
+            status: "error",
+            message: "failed to delete blog!!!",
+          } as dataFetchContextType,
+        });
       }
-      setMessage({ status: "success", message: "success to delete blog!!!" });
+      dispatchDataFetch({
+        type: DataFetchActionType.FETCH_SUCCESS,
+        payload: {
+          isLoading: false,
+          status: "success",
+          message: "success to delete blog!!!",
+        } as dataFetchContextType,
+      });
+      dispatchBlogList({
+        type: BlogListActionType.DELETE,
+        payload: title,
+      });
     } catch (err) {
       console.log(err);
+    } finally {
+      dispatchDataFetch({
+        type: DataFetchActionType.FETCH_SUCCESS,
+        payload: {
+          isLoading: false,
+          status: "success",
+          message: "success to delete blog!!!",
+        } as dataFetchContextType,
+      });
     }
   };
 
-  if (error) {
-    return (
-      <Message status="error" message={error.message} setMessage={setMessage} />
-    );
-  }
-  if (!response) {
-    return <Loading />;
-  }
-
-  const blogs = response.data;
   return (
     <>
       {blogs ? (

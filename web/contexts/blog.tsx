@@ -8,10 +8,7 @@ export type BlogListContextType = {
 };
 
 export const initialValue = {
-  blogs:
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("blogs") || "")
-      : [],
+  blogs: [],
   dispatchBlogList: () => {},
 };
 
