@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from "react";
 import { Blog } from "../openapi/api";
-import { BlogListAction, BlogListReducer } from "../reducers/root";
+import { BlogListAction, BlogListReducer } from "../reducers/blogList";
 
 export type BlogListContextType = {
   blogs: Blog[];
@@ -8,7 +8,7 @@ export type BlogListContextType = {
 };
 
 export const initialValue = {
-  blogs: [],
+  blogs: [] as Blog[],
   dispatchBlogList: () => {},
 };
 

@@ -6,21 +6,19 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-import {
-  useDataFetchContext,
-  dataFetchContextType,
-} from "../../contexts/dataFetch";
+import { dataFetchContextType } from "../../contexts/dataFetch";
 import { DataFetchActionType } from "../../reducers/dataFetch";
+import { useRootContext } from "../../contexts/root";
 
 export const Message = () => {
-  const { status, message, dispatchDataFetch } = useDataFetchContext();
+  const { dataFetch, dispatchDataFetch } = useRootContext();
   return (
     <>
-      {message ? (
-        <Alert status={status}>
+      {dataFetch.message ? (
+        <Alert status={dataFetch.status}>
           <AlertIcon />
-          <AlertTitle mr={2}>{status}</AlertTitle>
-          <AlertDescription>{message}</AlertDescription>
+          <AlertTitle mr={2}>{dataFetch.status}</AlertTitle>
+          <AlertDescription>{dataFetch.message}</AlertDescription>
           <CloseButton
             position="absolute"
             right="8px"

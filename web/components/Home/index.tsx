@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { Text, Heading, VStack, StackDivider, Button } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import toDate from "../../lib/date-util";
-import { Auth } from "aws-amplify";
 import { useRouter } from "next/router";
 import { useApi } from "../../hooks/useApi";
-import {
-  dataFetchContextType,
-  useDataFetchContext,
-} from "../../contexts/dataFetch";
+import { useIsLoggedIn } from "../../hooks/useIsLoggedIn";
+import { dataFetchContextType } from "../../contexts/dataFetch";
 import { DataFetchActionType } from "../../reducers/dataFetch";
-import { useBlogListContext } from "../../contexts/blog";
-import { BlogListActionType } from "../../reducers/root";
+import { BlogListActionType } from "../../reducers/blogList";
+import { useRootContext } from "../../contexts/root";
 
 const Home = () => {
-  // const { response, error } = useRequest<Blog[]>({
-  //   url: `${BASE_PATH}/blogs`,
-  //   method: "GET",
-  // });
-  const { blogs, dispatchBlogList } = useBlogListContext();
-  const { dispatchDataFetch } = useDataFetchContext();
+  const { blogs, dispatchBlogList, dispatchDataFetch } = useRootContext();
   const { api } = useApi();
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const { isLoggedIn } = useIsLoggedIn();
   const router = useRouter();
-
-  useEffect(() => {
-    const isUserLoggedIn = async () => {
-      const user = await Auth.currentAuthenticatedUser();
-      if (user) {
-        setLoggedIn(true);
-      }
-    };
-    isUserLoggedIn();
-  }, []);
 
   const handleOnEditClick = () => {
     router.push("/");

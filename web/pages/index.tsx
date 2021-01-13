@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Home from "../components/Home";
 import { Message } from "../components/Message";
-import { useBlogListContext } from "../contexts/blog";
-import { BlogListActionType } from "../reducers/root";
+import { BlogListActionType } from "../reducers/blogList";
 import { useApi } from "../hooks/useApi";
+import { useRootContext } from "../contexts/root";
 
 const App = () => {
   const { api } = useApi();
-  const { dispatchBlogList } = useBlogListContext();
+  const { dispatchBlogList } = useRootContext();
   useEffect(() => {
     const dispatchBlogContext = async () => {
       const response = await api.listBlogBlogsGet();
