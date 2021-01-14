@@ -8,33 +8,47 @@ export enum DataFetchActionType {
   FETCH_SUCCESS = "FETCH_SUCCESS",
   FETCH_ERROR = "FETCH_ERROR",
   FETCH_DONE = "FETCH_DONE",
-  DELET_MESSAGE = "DELETE_MESSAGE",
+  ADD_MESSAGE = "ADD_MESSAGE",
+  DELETE_MESSAGE = "DELETE_MESSAGE",
 }
+
+type DataFetchPayload = Omit<dataFetchContextType, "dispatchDataFetch">;
 
 export interface DataFetchAction {
   type: DataFetchActionType;
-  payload: dataFetchContextType;
+  payload?: Partial<DataFetchPayload>;
 }
 
 export const DataFetchReducer = (
   state: dataFetchContextType = initialDataFetchContext,
   action: DataFetchAction
-) => {
+): dataFetchContextType => {
   switch (action.type) {
     case DataFetchActionType.FETCH_INIT: {
-      return { ...action.payload } as dataFetchContextType;
+      return { ...state, isLoading: true };
     }
     case DataFetchActionType.FETCH_SUCCESS: {
-      return { ...action.payload } as dataFetchContextType;
+      return { ...state, isLoading: false };
     }
     case DataFetchActionType.FETCH_ERROR: {
-      return { ...action.payload } as dataFetchContextType;
+      return {
+        ...state,
+        status: "error",
+        message: action.payload?.message as string,
+      };
     }
     case DataFetchActionType.FETCH_DONE: {
-      return { ...action.payload } as dataFetchContextType;
+      return { ...state, isLoading: false };
     }
-    case DataFetchActionType.DELET_MESSAGE: {
-      return { ...action.payload } as dataFetchContextType;
+    case DataFetchActionType.ADD_MESSAGE: {
+      return {
+        ...state,
+        status: "info",
+        message: action.payload?.message as string,
+      };
+    }
+    case DataFetchActionType.DELETE_MESSAGE: {
+      return { ...state, message: "" };
     }
     default: {
       return state;

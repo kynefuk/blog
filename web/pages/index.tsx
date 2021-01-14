@@ -4,20 +4,44 @@ import { Message } from "../components/Message";
 import { BlogListActionType } from "../reducers/blogList";
 import { useApi } from "../hooks/useApi";
 import { useRootContext } from "../contexts/root";
+import { LoadingComponent } from "../components/Loading/index";
+import { DataFetchActionType } from "../reducers/dataFetch";
 
 const App = () => {
   const { api } = useApi();
-  const { dispatchBlogList } = useRootContext();
+  const { dispatchBlogList, dataFetch, dispatchDataFetch } = useRootContext();
   useEffect(() => {
     const dispatchBlogContext = async () => {
-      const response = await api.listBlogBlogsGet();
-      dispatchBlogList({
-        type: BlogListActionType.ADD,
-        payload: response.data,
+      dispatchDataFetch({
+        type: DataFetchActionType.FETCH_INIT,
       });
+      try {
+        const response = await api.listBlogBlogsGet();
+        dispatchBlogList({
+          type: BlogListActionType.ADD,
+          payload: response.data,
+        });
+      } catch (err) {
+        dispatchDataFetch({
+          type: DataFetchActionType.FETCH_ERROR,
+          payload: { message: err },
+        });
+      } finally {
+        dispatchDataFetch({
+          type: DataFetchActionType.FETCH_DONE,
+        });
+      }
     };
     dispatchBlogContext();
-  }, [api, dispatchBlogList]);
+  }, [api, dispatchBlogList, dispatchDataFetch]);
+
+  if (dataFetch.isLoading) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    );
+  }
 
   return (
     <>

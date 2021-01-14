@@ -6,7 +6,6 @@ import {
   AlertDescription,
   CloseButton,
 } from "@chakra-ui/react";
-import { dataFetchContextType } from "../../contexts/dataFetch";
 import { DataFetchActionType } from "../../reducers/dataFetch";
 import { useRootContext } from "../../contexts/root";
 
@@ -25,12 +24,7 @@ export const Message = () => {
             top="8px"
             onClick={() =>
               dispatchDataFetch({
-                type: DataFetchActionType.DELET_MESSAGE,
-                payload: {
-                  isLoading: false,
-                  status: "success",
-                  message: "",
-                } as dataFetchContextType,
+                type: DataFetchActionType.DELETE_MESSAGE,
               })
             }
           />

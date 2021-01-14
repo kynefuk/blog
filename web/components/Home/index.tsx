@@ -6,7 +6,6 @@ import toDate from "../../lib/date-util";
 import { useRouter } from "next/router";
 import { useApi } from "../../hooks/useApi";
 import { useIsLoggedIn } from "../../hooks/useIsLoggedIn";
-import { dataFetchContextType } from "../../contexts/dataFetch";
 import { DataFetchActionType } from "../../reducers/dataFetch";
 import { BlogListActionType } from "../../reducers/blogList";
 import { useRootContext } from "../../contexts/root";
@@ -25,30 +24,17 @@ const Home = () => {
     try {
       dispatchDataFetch({
         type: DataFetchActionType.FETCH_INIT,
-        payload: {
-          isLoading: true,
-          status: "success",
-          message: "",
-        } as dataFetchContextType,
       });
       const response = await api.deleteBlogBlogBlogTitleDelete(title);
-      if (response.status !== 204) {
-        dispatchDataFetch({
-          type: DataFetchActionType.FETCH_ERROR,
-          payload: {
-            isLoading: false,
-            status: "error",
-            message: "failed to delete blog!!!",
-          } as dataFetchContextType,
-        });
+      // TODO
+      if (response.status !== 200) {
+        throw new Error("failed to delete blog!!!!");
       }
       dispatchDataFetch({
-        type: DataFetchActionType.FETCH_SUCCESS,
+        type: DataFetchActionType.ADD_MESSAGE,
         payload: {
-          isLoading: false,
-          status: "success",
           message: "success to delete blog!!!",
-        } as dataFetchContextType,
+        },
       });
       dispatchBlogList({
         type: BlogListActionType.DELETE,
@@ -56,14 +42,15 @@ const Home = () => {
       });
     } catch (err) {
       console.log(err);
+      dispatchDataFetch({
+        type: DataFetchActionType.FETCH_ERROR,
+        payload: {
+          message: "failed to delete blog!!!",
+        },
+      });
     } finally {
       dispatchDataFetch({
-        type: DataFetchActionType.FETCH_SUCCESS,
-        payload: {
-          isLoading: false,
-          status: "success",
-          message: "success to delete blog!!!",
-        } as dataFetchContextType,
+        type: DataFetchActionType.FETCH_DONE,
       });
     }
   };

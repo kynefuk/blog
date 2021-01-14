@@ -1,14 +1,9 @@
-import { CircularProgress } from "@chakra-ui/react";
-import { useRootContext } from "../../contexts/root";
+import { CircularProgress, Container } from "@chakra-ui/react";
 
-export const Loading = () => {
-  const { dataFetch } = useRootContext();
-
+export const LoadingComponent = () => {
   return (
-    <>
-      {dataFetch.isLoading && (
-        <CircularProgress isIndeterminate color="green.300" />
-      )}
-    </>
+    <Container textAlign="center" mt="100">
+      <CircularProgress isIndeterminate color="green.300" size="120px" />
+    </Container>
   );
 };
